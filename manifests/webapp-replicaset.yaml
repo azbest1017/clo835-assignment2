@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: webapp-replicaset
+  namespace: webapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: employees
+  template:
+    metadata:
+      labels:
+        app: employees
+    spec:
+      containers:
+        - name: webapp
+          image: <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/clo835-webapp:latest
+          ports:
+            - containerPort: 81
+          env:
+            - name: DBHOST
+              value: mysql-service.mysql.svc.cluster.local
+            - name: DBPORT
+              value: "3306"
+            - name: DBUSER
+              value: user
+            - name: DBPWD
+              value: pw
+            - name: DATABASE
+              value: employees
